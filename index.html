@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { 
+      font-family: 'Segoe UI', Arial, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background-color: #e8f0fe; 
+      color: #202124;
+    }
+    .card { 
+      max-width: 640px; 
+      margin: 15px auto; 
+      background: white; 
+      padding: 0 0 30px 0; 
+      border-radius: 8px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+      overflow: hidden; 
+      border: 1px solid #dadce0;
+    }
+    .card-content { padding: 0 30px; }
+    .banner-img { width: 100%; height: auto; display: block; margin-bottom: 20px; }
+    
+    h2 { 
+      color: #202124; 
+      text-align: left; 
+      margin-bottom: 15px; 
+      font-size: 24px; 
+      font-weight: bold;
+      line-height: 1.3;
+    }
+    
+    .intro-text, .nota-box, .proteccion-datos {
+      font-size: 13.5px;
+      color: #3c4043;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .enlaces-info {
+      font-size: 13.5px;
+      color: #202124;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .enlaces-info a {
+      color: #1a73e8;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+    .subtexto-pregunta {
+      font-size: 13px;
+      color: #5f6368;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      line-height: 1.4;
+      font-weight: normal;
+    }
+
+    .section-header { 
+      font-size: 15px; 
+      font-weight: bold; 
+      color: #ffffff; 
+      background: #1a73e8; 
+      padding: 12px 15px; 
+      border-radius: 4px; 
+      margin-top: 20px; 
+      margin-bottom: 15px; 
+    }
+    
+    label { 
+      display: block; 
+      margin-top: 18px; 
+      font-weight: bold; 
+      color: #202124; 
+      font-size: 14px; 
+      line-height: 1.4; 
+    }
+    
+    .required { color: #d93025; }
+    
+    /* INPUTS GENERALES */
+    input[type="text"], input[type="tel"], input[type="email"], textarea { 
+      width: 100%; 
+      padding: 11px; 
+      margin-top: 6px; 
+      box-sizing: border-box; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+      font-size: 14px; 
+      font-family: inherit;
+      background: #ffffff;
+    }
+    input:focus, textarea:focus { 
+      border-color: #1a73e8; 
+      outline: none; 
+    }
+
+    /* REGLA CSS PARA REMOVER FLECHAS (SPINNERS) EN NAVEGADORES QUE USEN INPUT TYPE NUMBER */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    
+    .option-group { margin-top: 10px; }
+    .checkbox-option, .radio-option { display: flex; align-items: flex-start; margin-bottom: 12px; cursor: pointer; }
+    .checkbox-option input, .radio-option input {
+      flex: 0 0 22px;
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      margin: 1px 12px 0 0;
+      cursor: pointer;
+      accent-color: #1a73e8;
+    }
+    .checkbox-option span, .radio-option span { font-size: 14px; color: #3c4043; font-weight: normal; line-height: 1.4; }
+    
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    button { 
+      width: 100%; 
+      padding: 13px; 
+      margin-top: 20px; 
+      background-color: #1a73e8; 
+      color: white; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-size: 15px; 
+      font-weight: bold; 
+      transition: background-color 0.2s;
+    }
+    button:hover { background-color: #1557b0; }
+    button:disabled { background-color: #cccccc; cursor: not-allowed; }
+    
+    button.btn-secondary {
+      width: auto;
+      min-width: 120px;
+      margin-top: 0;
+      padding: 13px 20px;
+      background-color: transparent;
+      color: #1a73e8;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+    }
+    button.btn-secondary:hover { background-color: #f1f3f4; }
+
+    .btn-container button.btn-primary {
+      margin-top: 0;
+    }
+
+    .hidden { display: none !important; }
+    .error { color: #d93025; margin-top: 15px; text-align: center; font-weight: bold; background-color: #fce8e6; padding: 12px; border-radius: 4px; border: 1px solid #f5c6cb; font-size: 13.5px; }
+    .exito { color: #137333; margin-top: 15px; text-align: center; font-weight: bold; background-color: #e6f4ea; padding: 20px; border-radius: 4px; border: 1px solid #ceead6; line-height: 1.5; }
+    .info-cedula { background-color: #e8f0fe; border: 1px solid #c2e7ff; padding: 10px 14px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; color: #1a0dab; font-size: 14px; }
+
+    /* ESTILOS DEL MODAL PERSONALIZADO */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-box {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 85%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border-top: 5px solid #1a73e8;
+    }
+    .modal-box h3 {
+      margin-top: 0;
+      color: #202124;
+      font-size: 18px;
+    }
+    .modal-box p {
+      color: #5f6368;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 15px 0 20px 0;
+    }
+    .modal-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 0;
+      width: auto;
+    }
+    .modal-btn:hover {
+      background-color: #1557b0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- BANNER SUPERIOR -->
+  <img class="banner-img" src="banner.png" alt="Banner Institucional">
+
+  <div class="card-content">
+
+  <div class="card-content">
+    
+    <!-- PASO DE VERIFICACIÓN DE CÉDULA -->
+    <div id="paso-cedula">
+      <h2>Formulario de Aceptación – Potenciales Beneficiarios Política de Gratuidad MEN Aspirantes Admitidos Semestre 2027-1</h2>
+      
+      <p class="intro-text">
+        Apreciado estudiante, a través del diligenciamiento del presente formulario, se solicita amablemente notificar su aprobación para la aplicación al beneficio Política de Gratuidad del Ministerio de Educación Nacional como potencial beneficiario para el semestre 2027-1.<br><br>
+        <strong>Lo anterior, con el fin de que pueda pasar a estado matriculado e iniciar su proceso formativo.</strong>
+      </p>
+
+      <p class="nota-box">
+        <strong>Nota: en caso de no cumplir con los requisitos para acceder al beneficio de la Política de Gratuidad, te solicitamos diligenciar el formulario y seleccionar las respuestas correspondientes para indicar si deseas continuar con el proceso de matrícula mediante el pago con recursos propios.</strong>
+      </p>
+
+      <div class="proteccion-datos">
+        <p><strong>PROTECCIÓN DE DATOS PERSONALES:</strong> En cumplimiento de lo dispuesto en la Ley 1581 de 2012 y el Decreto 1377 de 2013, la Institución Universitaria Digital de Antioquia informa que los datos personales suministrados a través del presente formulario serán recolectados y tratados con la finalidad de gestionar el proceso de inscripción, evaluación, selección y comunicación de resultados de la presente convocatoria, así como para fines administrativos derivados de la misma.</p>
+        <p>La información será tratada conforme a la Política de Tratamiento de Datos Personales de la entidad y bajo los principios de confidencialidad y seguridad de la información.</p>
+      </div>
+
+      <div class="enlaces-info">
+        <div><strong>Para conocer la política de datos personales clic <a href="https://www.iudigital.edu.co/pdfs/transparencia/Normatividad/Resoluciones/2019/Resoluci%C3%B3n%20074%20-%20Anexo%20Pol%C3%ADtica%20Protecci%C3%B3n%20de%20Datos.pdf" target="_blank">Aquí</a></strong></div>
+        <div style="margin-top: 6px;"><strong>Para conocer el Reglamento Operativo de la Política de Gratuidad, haz clic <a href="https://drive.google.com/file/d/1Wd2tjauHi2uLWEQZMIPp4aCEX8KHfegi/view" target="_blank">Aquí</a></strong></div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #dadce0; margin: 25px 0;">
+
+      <!-- CAMPO DE CÉDULA NUMÉRICO SIN FLECHAS Y CON MÁSCARA EN TIEMPO REAL -->
+      <label for="cedula-input">Número de Documento de Identidad <span class="required">*</span></label>
+      <input type="text" id="cedula-input" inputmode="numeric" placeholder="Ingrese su cédula sin puntos ni comas" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      <button id="btn-validar" class="btn-primary" onclick="validarCedula()">Verificar Beneficio</button>
+      <div id="mensaje-error" class="error hidden"></div>
+    </div>
+
+    <!-- FORMULARIO DE DILIGENCIAMIENTO -->
+    <form id="formularioAceptacion" onsubmit="return false;">
+      
+      <!-- SECCIÓN 1: Datos Personales y Preguntas -->
+      <div id="paso-1" class="hidden">
+        <h2>Formulario de Aceptación – Potenciales Beneficiarios Política de Gratuidad MEN Aspirantes Admitidos Semestre 2027-1</h2>
+
+        <div class="info-cedula">Cédula verificada: <span id="lbl-cedula"></span></div>
+
+        <!-- CORREO ELECTRÓNICO -->
+        <label for="correo">Correo electrónico <span class="required">*</span></label>
+        <input type="email" id="correo" placeholder="Ej: usuario@correo.com" required>
+
+        <!-- NOMBRE COMPLETO -->
+        <label for="nombre">Nombres y apellidos completos <span class="required">*</span></label>
+        <input type="text" id="nombre" placeholder="Escriba sus nombres y apellidos completos" required>
+
+        <!-- GRUPOS POBLACIONALES -->
+        <label>¿Pertenece a alguno de los siguientes grupos poblacionales priorizados por el Ministerio de Educación Nacional para aplicar a la Política de Gratuidad? <span class="required">*</span></label>
+        <div class="option-group">
+          <div><label class="checkbox-option"><input type="checkbox" name="poblacion" value="Estrato socioeconómico 1, 2, 3 o sin estrato."></div><span>Estrato socioeconómico 1, 2, 3 o sin estrato.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Grupos A, B, o C del Sisbén IV, en cualquiera de sus subgrupos."><span>Grupos A, B, o C del Sisbén IV, en cualquiera de sus subgrupos.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Población Víctima del conflicto."><span>Población Víctima del conflicto.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Población indígena."><span>Población indígena.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Comunidades negras, afrocolombianas, raizales y palenqueras."><span>Comunidades negras, afrocolombianas, raizales y palenqueras.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Comunidades campesinas."><span>Comunidades campesinas.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Población privada de la libertad."><span>Población privada de la libertad.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Población con discapacidad."><span>Población con discapacidad.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Población Rrom."><span>Población Rrom.</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="poblacion" value="Ninguna."><span>Ninguna.</span></label>
+        </div>
+
+        <!-- TÍTULO PROFESIONAL -->
+        <label>¿Actualmente cuenta con un título profesional universitario de pregrado? <span class="required">*</span></label>
+        <div class="subtexto-pregunta">Si anteriormente obtuvo un título técnico o tecnológico, este no se considera un título profesional universitario para efectos de este requisito.</div>
+        <div class="option-group">
+          <label class="radio-option"><input type="radio" name="titulo" value="Si." required><span>Si.</span></label>
+          <label class="radio-option"><input type="radio" name="titulo" value="No."><span>No.</span></label>
+        </div>
+
+        <!-- BENEFICIO ACTIVO EN OTRA IES -->
+        <label>¿Cuenta con el beneficio Política de Gratuidad activo en otra institución o programa académico? <span class="required">*</span></label>
+        <div class="subtexto-pregunta">El beneficio de la Política de Gratuidad solo puede estar activo en una Institución de Educación Superior o Universidad a la vez.</div>
+        <div class="option-group">
+          <label class="radio-option"><input type="radio" name="beneficio_activo" value="Si." required><span>Si.</span></label>
+          <label class="radio-option"><input type="radio" name="beneficio_activo" value="No."><span>No.</span></label>
+        </div>
+
+        <!-- ACEPTA APLICACIÓN -->
+        <label>¿Confirma que acepta la aplicación del beneficio Política de Gratuidad como potencial beneficiario para el semestre 2027-1? <span class="required">*</span></label>
+        <div class="option-group">
+          <label class="radio-option"><input type="radio" name="acepta_aplicacion" value="Sí, acepto." required><span>Sí, acepto.</span></label>
+          <label class="radio-option"><input type="radio" name="acepta_aplicacion" value="No, no deseo que se aplique."><span>No, no deseo que se aplique.</span></label>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="evaluarPaso1()">Siguiente</button>
+      </div>
+
+      <!-- SECCIÓN ACEPTA: Términos y Condiciones -->
+      <div id="paso-2" class="hidden">
+        <h2>Formulario de Aceptación – Potenciales Beneficiarios Política de Gratuidad MEN Aspirantes Admitidos Semestre 2027-1</h2>
+
+        <div class="section-header">Aceptación de Términos y Condiciones (Política de Gratuidad / Pago de Matrícula)</div>
+
+        <p class="intro-text">
+          <strong>Entiendo y acepto que la información suministrada será validada para determinar el cumplimiento de los requisitos establecidos en la Política de Gratuidad del MEN. Asimismo, declaro que la información proporcionada para la postulación al beneficio es verídica y exacta, y que la dirección de correo electrónico registrada es correcta y permite la recepción de la información que se requiera para efectos del beneficio. <span class="required">*</span></strong>
+        </p>
+
+        <label class="checkbox-option">
+          <input type="checkbox" id="termino1">
+          <span>Acepto que, en caso de cumplir con los requisitos establecidos y obtener la aprobación correspondiente por parte del Ministerio de Educación Nacional, podré acceder al beneficio de la Política de Gratuidad. <span class="required">*</span></span>
+        </label>
+
+        <label class="checkbox-option">
+          <input type="checkbox" id="termino2">
+          <span>En caso de no cumplir con los requisitos o de no obtener la aprobación del beneficio, exonero a la IU Digital de Antioquia de asumir el pago o cualquier obligación financiera relacionada con el valor de mi matrícula, por lo que me comprometo a realizar dicho pago con recursos propios, de acuerdo con las condiciones y valores establecidos por la institución. <span class="required">*</span></span>
+        </label>
+
+        <div class="btn-container">
+          <button type="button" class="btn-secondary" onclick="volverAPaso1('paso-2')">Atrás</button>
+          <button type="button" class="btn-primary" id="btn-enviar-acepta" onclick="enviarFormulario('Sí, acepto.')">Enviar</button>
+        </div>
+      </div>
+
+      <!-- SECCIÓN RECHAZA: Pago con Recursos Propios -->
+      <div id="paso-no-acepta" class="hidden">
+        <h2>Formulario de Aceptación – Potenciales Beneficiarios Política de Gratuidad MEN Aspirantes Admitidos Semestre 2027-1</h2>
+
+        <div class="section-header">Al no cumplir con los requisitos establecidos para acceder al beneficio de la Política de Gratuidad.</div>
+
+        <label>¿Desea realizar el pago de su matrícula con recursos propios? <span class="required">*</span></label>
+        <div class="option-group">
+          <label class="radio-option"><input type="radio" name="recursos_propios" value="Si"><span>Si</span></label>
+          <label class="radio-option"><input type="radio" name="recursos_propios" value="No"><span>No</span></label>
+        </div>
+
+        <div class="btn-container">
+          <button type="button" class="btn-secondary" onclick="volverAPaso1('paso-no-acepta')">Atrás</button>
+          <button type="button" class="btn-primary" id="btn-enviar-rechaza" onclick="enviarFormulario('No, no deseo que se aplique.')">Enviar</button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- MENSAJE DE ÉXITO -->
+    <div id="mensaje-exito" class="exito hidden">
+      ¡Tu respuesta para el Formulario Aceptación Gratuidad – Potenciales Beneficiarios Política de Gratuidad MEN Aspirantes Admitidos Semestre 2027-1 ha sido registrada exitosamente!
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE ADVERTENCIA PERSONALIZADO -->
+<div id="custom-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3 id="modal-title">Atención</h3>
+    <p id="modal-message"></p>
+    <button onclick="cerrarModal()" class="modal-btn">Aceptar</button>
+  </div>
+</div>
+
+<script>
+  // URL de la implementación de Apps Script (termina en /exec)
+  const API_URL = "https://script.google.com/macros/s/AKfycbx2HZV6My0BEhu6Noz-bzlckG_pC8X5UU76MUgptxoE9M9QXuPYmL00e-lk6So6uMyP/exec";
+
+  let cedulaValidada = "";
+  let intentosFallidosCedula = 0;
+  const MAX_INTENTOS_CEDULA = 7;
+
+  // Llama al backend sin cookies ni cuenta de Google (evita el error en Android con varias cuentas)
+  function llamarApi(payload) {
+    return fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+      credentials: "omit",
+      redirect: "follow"
+    }).then(function(r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+  }
+
+  const MSG_RED = "No fue posible comunicarse con el servidor. Verifique su conexión e intente nuevamente.";
+
+  function mostrarModal(mensaje, titulo = "Atención") {
+    document.getElementById("modal-title").innerText = titulo;
+    document.getElementById("modal-message").innerText = mensaje;
+    document.getElementById("custom-modal").classList.remove("hidden");
+  }
+
+  function cerrarModal() {
+    document.getElementById("custom-modal").classList.add("hidden");
+  }
+
+  // Sanitización de entradas para prevenir XSS
+  function sanitizarTexto(input) {
+    if (!input) return "";
+    return input.replace(/[<>'"]/g, "").trim();
+  }
+
+  function validarCedula() {
+    const input = document.getElementById("cedula-input").value.trim();
+    const errorDiv = document.getElementById("mensaje-error");
+    const btn = document.getElementById("btn-validar");
+
+    // Control de límite de intentos (Fuerza Bruta)
+    if (intentosFallidosCedula >= MAX_INTENTOS_CEDULA) {
+      mostrarModal("Ha superado el número de intentos fallidos permitidos. Por favor, intente más tarde.");
+      return;
+    }
+
+    if (!input) {
+      mostrarModal("Por favor ingrese su número de documento de identidad.");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Verificando...";
+    errorDiv.classList.add("hidden");
+
+    llamarApi({ accion: "verificar", cedula: input }).then(function(res) {
+      btn.disabled = false;
+      btn.innerText = "Verificar Beneficio";
+
+      if (res.error) {
+        mostrarModal(res.error);
+      } else if (!res.existe) {
+        intentosFallidosCedula++;
+        errorDiv.innerText = "No encontramos tu cédula en el listado de admitidos para el Semestre 2027-1. Por favor valida que no contenga puntos ni espacios. Si tu cédula está bien escrita, comunícate al correo atencionalciudadano@iudigital.edu.co para revisar tu caso.";
+        errorDiv.classList.remove("hidden");
+      } else if (res.yaRespondio) {
+        errorDiv.innerText = "Esta cédula ya ha registrado una respuesta previamente en la plataforma.";
+        errorDiv.classList.remove("hidden");
+      } else {
+        cedulaValidada = input;
+        document.getElementById("lbl-cedula").innerText = cedulaValidada;
+
+        document.getElementById("paso-cedula").classList.add("hidden");
+        document.getElementById("paso-1").classList.remove("hidden");
+        window.scrollTo(0, 0);
+      }
+    }).catch(function() {
+      btn.disabled = false;
+      btn.innerText = "Verificar Beneficio";
+      mostrarModal(MSG_RED);
+    });
+  }
+
+  function evaluarPaso1() {
+    const correo = sanitizarTexto(document.getElementById("correo").value);
+    const nombre = sanitizarTexto(document.getElementById("nombre").value);
+    const poblaciones = document.querySelectorAll('input[name="poblacion"]:checked');
+    const titulo = document.querySelector('input[name="titulo"]:checked');
+    const beneficio = document.querySelector('input[name="beneficio_activo"]:checked');
+    const acepta = document.querySelector('input[name="acepta_aplicacion"]:checked');
+
+    // Validaciones individuales de Paso 1
+    if (!correo) {
+      mostrarModal("Por favor ingrese su correo electrónico.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(correo)) {
+      mostrarModal("El correo electrónico ingresado no es válido. Asegúrese de incluir el '@' y un dominio correcto (ej: usuario@dominio.com).");
+      return;
+    }
+
+    if (!nombre) {
+      mostrarModal("Por favor ingrese sus nombres y apellidos completos.");
+      return;
+    }
+
+    if (poblaciones.length === 0) {
+      mostrarModal("Por favor seleccione al menos una opción en los grupos poblacionales.");
+      return;
+    }
+
+    if (!titulo) {
+      mostrarModal("Por favor indique si cuenta actualmente con un título profesional universitario.");
+      return;
+    }
+
+    if (!beneficio) {
+      mostrarModal("Por favor indique si cuenta con el beneficio de Política de Gratuidad activo en otra IES.");
+      return;
+    }
+
+    if (!acepta) {
+      mostrarModal("Por favor indique si acepta o no la aplicación del beneficio de Política de Gratuidad.");
+      return;
+    }
+
+    document.getElementById("paso-1").classList.add("hidden");
+
+    if (acepta.value === "Sí, acepto.") {
+      document.getElementById("paso-2").classList.remove("hidden");
+    } else {
+      document.getElementById("paso-no-acepta").classList.remove("hidden");
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function volverAPaso1(origen) {
+    document.getElementById(origen).classList.add("hidden");
+    document.getElementById("paso-1").classList.remove("hidden");
+    window.scrollTo(0, 0);
+  }
+
+  function enviarFormulario(tipoRespuesta) {
+    const correo = sanitizarTexto(document.getElementById("correo").value);
+    const nombre = sanitizarTexto(document.getElementById("nombre").value);
+    let termino1Val = "N/A";
+    let termino2Val = "N/A";
+    let pagoRecursosVal = "N/A";
+
+    if (tipoRespuesta === "Sí, acepto.") {
+      const t1 = document.getElementById("termino1").checked;
+      const t2 = document.getElementById("termino2").checked;
+
+      if (!t1 || !t2) {
+        mostrarModal("Debe aceptar ambos Términos y Condiciones marcando las casillas obligatorias para enviar el formulario.");
+        return;
+      }
+      termino1Val = "Sí";
+      termino2Val = "Sí";
+    } else {
+      const recursosRadio = document.querySelector('input[name="recursos_propios"]:checked');
+      if (!recursosRadio) {
+        mostrarModal("Por favor indique si desea realizar el pago de su matrícula con recursos propios.");
+        return;
+      }
+      pagoRecursosVal = recursosRadio.value;
+    }
+
+    const poblacionesArr = [];
+    document.querySelectorAll('input[name="poblacion"]:checked').forEach(cb => poblacionesArr.push(cb.value));
+
+    const btn = (tipoRespuesta === "Sí, acepto.") ? document.getElementById("btn-enviar-acepta") : document.getElementById("btn-enviar-rechaza");
+    btn.disabled = true;
+    btn.innerText = "Enviando...";
+
+    const datos = {
+      cedula: cedulaValidada,
+      correo: correo,
+      nombre: nombre,
+      gruposPoblacionales: poblacionesArr.join(", "),
+      tituloProfesional: document.querySelector('input[name="titulo"]:checked').value,
+      beneficioActivo: document.querySelector('input[name="beneficio_activo"]:checked').value,
+      aceptaAplicacion: tipoRespuesta,
+      pagoRecursosPropios: pagoRecursosVal,
+      termino1: termino1Val,
+      termino2: termino2Val
+    };
+
+    llamarApi({ accion: "guardar", datos: datos }).then(function(res) {
+      if (res && res.exito) {
+        document.getElementById("paso-2").classList.add("hidden");
+        document.getElementById("paso-no-acepta").classList.add("hidden");
+        document.getElementById("mensaje-exito").classList.remove("hidden");
+        window.scrollTo(0, 0);
+      } else {
+        btn.disabled = false;
+        btn.innerText = "Enviar";
+        mostrarModal(res.mensaje || "Ocurrió un error al guardar la respuesta. Por favor intente nuevamente.");
+      }
+    }).catch(function() {
+      btn.disabled = false;
+      btn.innerText = "Enviar";
+      mostrarModal(MSG_RED);
+    });
+  }
+</script>
+
+</body>
+</html>
